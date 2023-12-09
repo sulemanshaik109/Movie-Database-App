@@ -14,6 +14,7 @@ const apiStatusConstants = {
 class TopRated extends Component {
   state = {
     topRatedMovies: [],
+    searchInput: '',
     apiStatus: apiStatusConstants.initial,
   }
 
@@ -30,8 +31,8 @@ class TopRated extends Component {
       const fetchedData = await response.json()
       const formattedData = fetchedData.results.map(eachResult => ({
         id: eachResult.id,
-        backdropPath: eachResult.backdrop_path,
-        name: eachResult.original_title,
+        posterPath: eachResult.poster_path,
+        name: eachResult.title,
         rating: eachResult.vote_average,
       }))
       this.setState({
@@ -64,7 +65,6 @@ class TopRated extends Component {
 
   renderTopRatedMovies = () => {
     const {topRatedMovies} = this.state
-    console.log(topRatedMovies)
     return (
       <ul className="popular-movies-list">
         {topRatedMovies.map(eachMovie => (
@@ -90,9 +90,13 @@ class TopRated extends Component {
   }
 
   render() {
+    const {searchInput} = this.state
     return (
       <>
-        <Header changeSearchInput={this.changeSearchInput} />
+        <Header
+          searchInput={searchInput}
+          changeSearchInput={this.changeSearchInput}
+        />
         {this.renderTopRatedPage()}
       </>
     )

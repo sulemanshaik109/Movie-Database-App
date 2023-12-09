@@ -11,24 +11,26 @@ const apiStatusConstants = {
   inProgress: 'IN_PROGRESS',
 }
 
-class Upcoming extends Component {
+class SearchResults extends Component {
   state = {
-    upcomingMovies: [],
+    searchResults: [],
     searchInput: '',
     apiStatus: apiStatusConstants.initial,
   }
 
   componentDidMount() {
-    this.getUpcomingMovies()
+    this.getSearchResults()
   }
 
-  getUpcomingMovies = async () => {
+  getSearchResults = async () => {
     this.setState({apiStatus: apiStatusConstants.inProgress})
     const apiKey = '2fce994b12907f408ed462c69fd7c2cc'
-    const apiUrl = `https://api.themoviedb.org/3/movie/upcoming?api_key=${apiKey}&language=en-US&page=1`
+    const {searchInput} = this.state
+    const apiUrl = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&language=en-US&query=${searchInput}&page=1`
     const response = await fetch(apiUrl)
     if (response.ok) {
       const fetchedData = await response.json()
+      console.log(fetchedData)
       const formattedData = fetchedData.results.map(eachResult => ({
         id: eachResult.id,
         posterPath: eachResult.poster_path,
@@ -36,7 +38,7 @@ class Upcoming extends Component {
         rating: eachResult.vote_average,
       }))
       this.setState({
-        upcomingMovies: formattedData,
+        searchResults: formattedData,
         apiStatus: apiStatusConstants.success,
       })
     } else {
@@ -44,6 +46,14 @@ class Upcoming extends Component {
         apiStatus: apiStatusConstants.failure,
       })
     }
+  }
+
+  changeSearchInput = searchInput => {
+    this.setState({searchInput})
+  }
+
+  clickSearchBtn = () => {
+    this.getSearchResults()
   }
 
   renderLoadingView = () => (
@@ -63,23 +73,23 @@ class Upcoming extends Component {
     </div>
   )
 
-  renderUpcomingMovies = () => {
-    const {upcomingMovies} = this.state
+  renderPopularMovies = () => {
+    const {searchResults} = this.state
     return (
       <ul className="popular-movies-list">
-        {upcomingMovies.map(eachMovie => (
+        {searchResults.map(eachMovie => (
           <MovieCard key={eachMovie.id} movieData={eachMovie} />
         ))}
       </ul>
     )
   }
 
-  renderUpcomingPage = () => {
+  renderPopularPage = () => {
     const {apiStatus} = this.state
 
     switch (apiStatus) {
       case apiStatusConstants.success:
-        return this.renderUpcomingMovies()
+        return this.renderPopularMovies()
       case apiStatusConstants.failure:
         return this.renderFailureView()
       case apiStatusConstants.inProgress:
@@ -96,11 +106,12 @@ class Upcoming extends Component {
         <Header
           searchInput={searchInput}
           changeSearchInput={this.changeSearchInput}
+          clickSearchBtn={this.clickSearchBtn}
         />
-        {this.renderUpcomingPage()}
+        {this.renderPopularPage()}
       </>
     )
   }
 }
 
-export default Upcoming
+export default SearchResults

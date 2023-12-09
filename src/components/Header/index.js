@@ -1,13 +1,14 @@
 import {Link} from 'react-router-dom'
-import {BsSearch} from 'react-icons/bs'
 
 import './index.css'
 
 const Header = props => {
-  const {searchInput} = props
+  const {searchInput, clickSearchBtn, changeSearchInput} = props
   const onChangeSearchInput = event => {
-    const {changeSearchInput} = props
     changeSearchInput(event.target.value)
+  }
+  const onClickSearchInput = () => {
+    clickSearchBtn()
   }
   return (
     <nav className="nav-header">
@@ -32,16 +33,23 @@ const Header = props => {
             </Link>
           </li>
         </ul>
-        <div className="search-input-container">
-          <input
-            value={searchInput}
-            type="search"
-            className="search-input"
-            placeholder="Search"
-            onChange={onChangeSearchInput}
-          />
-          <BsSearch className="search-icon" />
-        </div>
+        <Link to="/search-results" className="nav-link">
+          <div className="search-input-container">
+            <input
+              value={searchInput}
+              type="search"
+              className="search-input"
+              onChange={onChangeSearchInput}
+            />
+            <button
+              className="search-btn"
+              type="button"
+              onClick={onClickSearchInput}
+            >
+              Search
+            </button>
+          </div>
+        </Link>
       </div>
     </nav>
   )

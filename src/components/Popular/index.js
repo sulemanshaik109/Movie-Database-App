@@ -29,10 +29,11 @@ class Popular extends Component {
     const response = await fetch(apiUrl)
     if (response.ok) {
       const fetchedData = await response.json()
+      console.log(fetchedData)
       const formattedData = fetchedData.results.map(eachResult => ({
         id: eachResult.id,
         posterPath: eachResult.poster_path,
-        name: eachResult.original_title,
+        name: eachResult.title,
         rating: eachResult.vote_average,
       }))
       this.setState({
@@ -69,7 +70,6 @@ class Popular extends Component {
 
   renderPopularMovies = () => {
     const {popularMovies} = this.state
-    console.log(popularMovies)
     return (
       <ul className="popular-movies-list">
         {popularMovies.map(eachMovie => (

@@ -67,8 +67,8 @@
   flex-grow: 1;
 }
 
-.search-icon {
-  color: #475569;
-  width: 20px;
-  height: 20px;
+.search-btn {
+  color: #000000;
+  font-family: 'Roboto';
+  border: none;
 }

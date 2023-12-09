@@ -7,11 +7,16 @@ const MovieCard = props => {
   const imageUrl = `https://image.tmdb.org/t/p/w500${posterPath}`
   return (
     <li className="movie-card">
-      <Link to={`movie/${id}`} className="link-item">
-        <img src={imageUrl} alt={name} className="movie-img" />
+      <img src={imageUrl} alt={name} className="movie-img" />
+      <div className="movie-details-container">
         <p className="name">{name}</p>
         <p className="rating">Rating: {rating}</p>
-      </Link>
+        <Link to={`movie/${id}`} className="link-item">
+          <button type="button" className="view-details-btn">
+            View Details
+          </button>
+        </Link>
+      </div>
     </li>
   )
 }
